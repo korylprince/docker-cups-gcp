@@ -6,11 +6,11 @@ RUN apt-get install -y git bzr build-essential ca-certificates libcups2-dev liba
 RUN git clone --branch "v1.1" --single-branch --depth 1 \
     https://github.com/korylprince/fileenv.git /go/src/github.com/korylprince/fileenv
 
-RUN git clone --branch "v1.16" --single-branch --depth 1 \
-    https://github.com/google/cloud-print-connector.git  /go/src/github.com/google/cloud-print-connector
+RUN git clone --branch "master" --single-branch --depth 1 \
+    https://github.com/korylprince/cloud-print-connector.git  /go/src/github.com/korylprince/cloud-print-connector
 
 RUN go install github.com/korylprince/fileenv
-RUN go get github.com/google/cloud-print-connector/...
+RUN go get github.com/korylprince/cloud-print-connector/...
 
 FROM ubuntu:18.04
 
