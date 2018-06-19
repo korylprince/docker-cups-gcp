@@ -1,21 +1,22 @@
-FROM golang:1.10-alpine as builder
+FROM golang:1.10-stretch as builder
 
-ARG VERSION
-
-RUN apk add --no-cache git bzr build-base avahi-dev cups-dev ca-certificates
+RUN apt-get update
+RUN apt-get install -y git bzr build-essential ca-certificates libcups2-dev libavahi-client-dev
 
 RUN git clone --branch "v1.1" --single-branch --depth 1 \
     https://github.com/korylprince/fileenv.git /go/src/github.com/korylprince/fileenv
 
-RUN git clone --branch "$VERSION" --single-branch --depth 1 \
+RUN git clone --branch "v1.16" --single-branch --depth 1 \
     https://github.com/google/cloud-print-connector.git  /go/src/github.com/google/cloud-print-connector
 
 RUN go install github.com/korylprince/fileenv
 RUN go get github.com/google/cloud-print-connector/...
 
-FROM alpine:3.7
+FROM ubuntu:18.04
 
-RUN apk add --no-cache ca-certificates jq cups-libs avahi-libs
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates jq libcups2 libavahi-client3 && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /go/bin/fileenv /
 COPY --from=builder /go/bin/gcp-connector-util /

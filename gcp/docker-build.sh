@@ -4,7 +4,7 @@ version=$1
 
 tag="korylprince/cups-gcp-gcp:$version"
 
-docker build --no-cache --build-arg "VERSION=$version" --tag "$tag" .
+docker build --no-cache --tag "$tag" .
 
 docker push "$tag"
 
