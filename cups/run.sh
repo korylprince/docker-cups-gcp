@@ -1,5 +1,23 @@
 #!/bin/sh
 
+TMPL="gcp-cups-connector.config.json.tmpl"
+CONFIG="gcp-cups-connector.config.json"
+
+if [ -z "$FCM_ENABLED" ]; then
+    FCM_ENABLED="false"
+fi
+
+if [ -z "$LOG_LEVEL" ]; then
+    LOG_LEVEL="INFO"
+fi
+
+jq ".fcm_notifications_enable=$FCM_ENABLED | \
+    .xmpp_jid=\"$XMPP_JID\" | \
+    .robot_refresh_token=\"$REFRESH_TOKEN\" | \
+    .proxy_name=\"$PROXY_NAME\" | \
+    .log_level=\"$LOG_LEVEL\"" \
+    $TMPL > $CONFIG
+
 #add user
 useradd -G lpadmin -M -s /usr/sbin/nologin $CUPS_USER
 
@@ -33,4 +51,8 @@ kill $PID
 sleep 1
 
 #run CUPS
-exec cupsd -f
+cupsd -f &
+
+sleep 3
+
+exec /gcp-cups-connector --log-to-console

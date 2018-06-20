@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   cups:
-    image: korylprince/cups-gcp-cups:v2.2.7
+    image: korylprince/cups-gcp-cups:v1.0.1
     networks:
       - cups
     ports:
@@ -13,25 +13,16 @@ services:
       CUPS_SERVER_ALIAS: "cups.${DOMAIN} cups"
       CUPS_USER: administrator
       CUPS_PASS_FILE: /run/secrets/cups_admin_pass
+      FCM_ENABLED: "true"
+      XMPP_JID_FILE: /run/secrets/cups_xmpp_jid
+      REFRESH_TOKEN_FILE: /run/secrets/cups_refresh_token
+      PROXY_NAME: "My Connector ID"
+      LOG_LEVEL: "INFO"
     deploy:
       mode: replicated
       replicas: 1
     secrets:
       - cups_admin_pass
-
-  connector:
-    image: korylprince/cups-gcp-gcp:v1.16
-    networks:
-      - cups
-    environment:
-      CUPS_SERVER: cups:631
-      XMPP_JID_FILE: /run/secrets/cups_xmpp_jid
-      REFRESH_TOKEN_FILE: /run/secrets/cups_refresh_token
-      PROXY_NAME: "My Connector ID"
-    deploy:
-      mode: replicated
-      replicas: 1
-    secrets:
       - cups_xmpp_jid
       - cups_refresh_token
 
