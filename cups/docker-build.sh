@@ -1,14 +1,16 @@
 #!/bin/bash
+set -e
 
 version=$1
 
-tag="korylprince/cups-gcp-cups:$version"
+tag="korylprince/cups-gcp-cups"
 
-docker build --no-cache --tag "$tag" .
+docker build --no-cache --build-arg "VERSION=$version" --tag "$tag:$version" .
 
-docker push "$tag"
+docker push "$tag:$version"
 
 if [ "$2" = "latest" ]; then
-    docker tag "$tag" "korylprince/cups-gcp-cups:latest"
-    docker push "korylprince/cups-gcp-cups:latest"
+    docker tag "$tag:$version" "$tag:latest"
+    docker push "$tag:latest"
 fi
+

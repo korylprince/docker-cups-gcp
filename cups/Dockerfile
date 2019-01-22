@@ -37,8 +37,8 @@ RUN apt-get update && \
     cups-filters \
     hplip \
     jq \
-    libavahi-client3 \
-    && rm -rf /var/lib/apt/lists/*
+    libavahi-client3 && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /plugin && \
     cd /plugin && \

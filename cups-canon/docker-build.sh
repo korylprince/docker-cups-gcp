@@ -3,7 +3,7 @@ set -e
 
 version=$1
 
-tag="korylprince/cups-gcp-resumer"
+tag="korylprince/cups-gcp-cups-canon"
 
 docker build --no-cache --build-arg "VERSION=$version" --tag "$tag:$version" .
 
@@ -13,4 +13,3 @@ if [ "$2" = "latest" ]; then
     docker tag "$tag:$version" "$tag:latest"
     docker push "$tag:latest"
 fi
-
